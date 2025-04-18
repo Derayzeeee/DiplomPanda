@@ -29,6 +29,17 @@ const ProductsList = () => {
     fetchProducts();
   }, []);
 
+  const [filter, setFilter] = useState({
+    category: 'all',
+    search: '',
+  });
+  
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = filter.category === 'all' || product.category === filter.category;
+    const matchesSearch = product.name.toLowerCase().includes(filter.search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   const fetchProducts = async () => {
     try {
       const response = await fetch('/api/products');
@@ -72,6 +83,26 @@ const ProductsList = () => {
         >
           Добавить товар
         </Button>
+      </Box>
+
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          label="Поиск по названию"
+          value={filter.search}
+          onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
+          sx={{ mr: 2 }}
+        />
+        <TextField
+          select
+          label="Категория"
+          value={filter.category}
+          onChange={(e) => setFilter(prev => ({ ...prev, category: e.target.value }))}
+        >
+          <MenuItem value="all">Все категории</MenuItem>
+          {categories.map(category => (
+            <MenuItem key={category} value={category}>{category}</MenuItem>
+          ))}
+        </TextField>
       </Box>
 
       <TableContainer component={Paper}>

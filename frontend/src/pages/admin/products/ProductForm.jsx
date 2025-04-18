@@ -24,11 +24,37 @@ const ProductForm = ({ initialData, onSubmit }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'price' || name === 'stock') {
+      // Проверяем, что значение положительное
+      if (value < 0) return;
+    }
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
+
+  const PreviewSection = () => (
+    <Box sx={{ mt: 4, p: 2, border: '1px dashed grey' }}>
+      <Typography variant="h6">Предпросмотр товара</Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          {formData.images[0]?.url && (
+            <img 
+              src={formData.images[0].url} 
+              alt="preview"
+              style={{ width: '100%', height: 'auto' }}
+            />
+          )}
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Typography variant="h5">{formData.name || 'Название товара'}</Typography>
+          <Typography variant="body1">{formData.description || 'Описание товара'}</Typography>
+          <Typography variant="h6">₽{formData.price || '0'}</Typography>
+        </Grid>
+      </Grid>
+    </Box>
+  );
 
   const handleImageUpload = (newImages) => {
     setFormData(prev => ({
