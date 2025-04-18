@@ -7,14 +7,10 @@ import {
   MenuItem,
   Typography,
   Paper,
-  Chip,
-  IconButton,
 } from '@mui/material';
-import { Delete, Add } from '@mui/icons-material';
 import ImageUpload from './ImageUpload';
 
 const categories = ['платья', 'блузки', 'юбки', 'брюки', 'аксессуары'];
-const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 const ProductForm = ({ initialData, onSubmit }) => {
   const [formData, setFormData] = useState(initialData || {
@@ -22,46 +18,15 @@ const ProductForm = ({ initialData, onSubmit }) => {
     description: '',
     price: '',
     category: '',
-    sizes: [],
-    colors: [],
     images: [],
     stock: '',
-    isNew: false,
-    isPopular: false,
   });
-  const [newColor, setNewColor] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
-  };
-
-  const handleSizeToggle = (size) => {
-    setFormData(prev => ({
-      ...prev,
-      sizes: prev.sizes.includes(size)
-        ? prev.sizes.filter(s => s !== size)
-        : [...prev.sizes, size]
-    }));
-  };
-
-  const handleAddColor = () => {
-    if (newColor && !formData.colors.includes(newColor)) {
-      setFormData(prev => ({
-        ...prev,
-        colors: [...prev.colors, newColor]
-      }));
-      setNewColor('');
-    }
-  };
-
-  const handleRemoveColor = (colorToRemove) => {
-    setFormData(prev => ({
-      ...prev,
-      colors: prev.colors.filter(color => color !== colorToRemove)
     }));
   };
 
@@ -90,7 +55,7 @@ const ProductForm = ({ initialData, onSubmit }) => {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h6" gutterBottom>
-              Основная информация
+              Информация о товаре
             </Typography>
           </Grid>
 
@@ -155,54 +120,12 @@ const ProductForm = ({ initialData, onSubmit }) => {
             <TextField
               fullWidth
               type="number"
-              label="Количество в наличии"
+              label="Количество"
               name="stock"
               value={formData.stock}
               onChange={handleChange}
               required
             />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Размеры
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-              {sizes.map((size) => (
-                <Chip
-                  key={size}
-                  label={size}
-                  onClick={() => handleSizeToggle(size)}
-                  color={formData.sizes.includes(size) ? 'primary' : 'default'}
-                />
-              ))}
-            </Box>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Цвета
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <TextField
-                label="Добавить цвет"
-                value={newColor}
-                onChange={(e) => setNewColor(e.target.value)}
-                size="small"
-              />
-              <IconButton onClick={handleAddColor}>
-                <Add />
-              </IconButton>
-            </Box>
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 1 }}>
-              {formData.colors.map((color) => (
-                <Chip
-                  key={color}
-                  label={color}
-                  onDelete={() => handleRemoveColor(color)}
-                />
-              ))}
-            </Box>
           </Grid>
 
           <Grid item xs={12}>
